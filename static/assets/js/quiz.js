@@ -37,7 +37,7 @@ window.addEventListener("DOMContentLoaded", ()=>{
       .then(response => response.json())
       .then(data => {
         questions = data.questions;
-        updateQuestion(); 
+        updateQuestion(); // Initialize with the first question
       });
 
 
@@ -55,9 +55,10 @@ window.addEventListener("DOMContentLoaded", ()=>{
       const clickX = event.clientX - cardContainer.getBoundingClientRect().left;
 
       if (clickX > cardContainer.offsetWidth / 2) {
-        
+        // Right side clicked
         currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
       } else {
+        // Left side clicked
         currentQuestionIndex = (currentQuestionIndex - 1 + questions.length) % questions.length;
       }
 
@@ -65,15 +66,28 @@ window.addEventListener("DOMContentLoaded", ()=>{
       setTimeout(() => {
         cardContainer.style.transform = card.classList.contains('flip') ? 'rotateY(180deg)' : 'rotateY(0deg)';
         updateQuestion();
-      }, 250); 
+      }, 250); // Wait for half of the flip animation before updating content
     }
     
-    updateQuestion(); 
+    updateQuestion(); // Initialize with the first question
+    // function addNewQuestion() {
+    //   const userInput = document.getElementById('userInput').value.trim();
+    
+    //   if (userInput !== '') {
+    //     questions.push(userInput);
+    //     alert('New question added successfully!');
+    //     document.getElementById('userInput').value = ''; // Clear the input field
+    //     updateQuestion();
+    //   } else {
+    //     alert('Please enter a valid question.');
+    //   }
+    // }
 
     function addNewQuestion() {
       const userInput = document.getElementById('userInput').value.trim();
     
       if (userInput !== '') {
+        // Add the new question to MongoDB
         fetch('/add_question', {
           method: 'POST',
           headers: {
@@ -84,9 +98,12 @@ window.addEventListener("DOMContentLoaded", ()=>{
           .then(response => response.json())
           .then(data => {
             if (data.success) {
-              questions.push(userInput);
+              if (questions.length > 0) questions.length = 0;
+              // If successfully added to MongoDB, update the local questions array
+              questions.push(data.question);
+              questions.push(data.answer);
               alert('New question added successfully!');
-              document.getElementById('userInput').value = ''; 
+              // document.getElementById('userInput').value = ''; // Clear the input field
               updateQuestion();
             } else {
               alert('Failed to add question to MongoDB. Please try again.');
