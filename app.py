@@ -1,29 +1,27 @@
 from flask import Flask, render_template, redirect, url_for, request, session,jsonify,flash
 from officialmodel import BardGenerator
 from flask_session import Session
-from flask_bcrypt import Bcrypt
 import datetime
 import requests
 import json
 from pymongo import MongoClient
-
 
 client = MongoClient('localhost', 27017)
 
 db = client.flask_db
 users = db.users
 
-
 app = Flask(__name__)
 app.secret_key = "BADKEY"
 app.config['SESSION_TYPE'] = 'filesystem'
-app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(minutes=30)
+app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(minutes=5)
 Session(app)
-bcrypt = Bcrypt(app)
 
+debug_login = False
 
 def go_to_login():
     # return False
+    if debug_login: return False
     if "uname" not in session or not session.get("uname"):
         return True
     else:
@@ -34,34 +32,29 @@ def signup():
     if request.method == "POST":
         session["name"] = str(request.form.get("name")).strip()
         session["uname"] = str(request.form.get("uname")).strip()
-        raw_password = str(request.form.get("pswd")).strip()  # Get the raw password
-        hashed_password = bcrypt.generate_password_hash(raw_password).decode('utf-8')  # Hash the password
-        session["pswd"] = hashed_password
-
-        existing_user = users.find_one({"uname": session["uname"]})
+        session["pswd"] = str(request.form.get("pswd")).strip()
+        existing_user = users.find_one({"uname": session["uname"], "name": session["name"]})
         if existing_user:
             flash('Username already exists. Please choose a different username.', 'error')
             return redirect(url_for('signup'))
-
         users.insert_one({"name": session["name"], "uname": session["uname"], "pswd": session["pswd"]})
         return redirect(url_for('index'))
     return render_template("login.html")
+
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         session["uname"] = str(request.form.get("uname")).strip()
-        raw_password = str(request.form.get("pswd")).strip()  # Get the raw password
-        existing_user = users.find_one({"uname": session["uname"]})
-
-        if existing_user and bcrypt.check_password_hash(existing_user["pswd"], raw_password):
-            return redirect(url_for('index'))
-        else:
+        session["pswd"] = str(request.form.get("pswd")).strip()
+        existing_user = users.find_one({"uname": session["uname"], "pswd": session["pswd"]})
+        if not existing_user:
             flash('Incorrect username or password. Please try again.', 'error')
             return redirect(url_for('login'))
+        session["name"] = users.find_one({"uname": session["uname"], "pswd": session["pswd"]}, {"name":1, "_id":0})["name"]
+        return redirect(url_for('index'))
 
     return render_template("login.html")
-
 
 @app.route("/index")
 def index():
@@ -120,7 +113,7 @@ def quiztemp():
     response = requests.post('http://127.0.0.1:5000/generate_quiz', data={"topic": topic, "difficulty": difficulty})
     print(response)
     questions = response.json()
-    print(questions)
+
     return render_template("quiztemp.html", questions=questions)
 
 @app.route('/signout')
@@ -129,18 +122,30 @@ def signout():
     return redirect(url_for('login'))
 
 
+# @app.route('/add_question', methods=["POST"])
+# def add_question():
+#     question_text = request.json.get('question')
+
+#     existing_user = users.find_one({"uname": session["uname"]})
+
+#     if existing_user:
+  
+#         users.update_one({"uname": session["uname"]}, {"$push": {"questions": question_text}})
+#         return jsonify({"success": True})
+#     else:
+#         return jsonify({"success": False, "message": "User not found"})
 @app.route('/add_question', methods=["POST"])
 def add_question():
-    question_text = request.json.get('question')
-
-    existing_user = users.find_one({"uname": session["uname"]})
-
+    topic = request.json.get('question')
+    # print(topic)
+    bard = BardGenerator()
+    bard.generate_questions_from_text_single_word(topic=topic, difficulty="college")
+    # print(bard.questions)
+    existing_user = users.find_one({"uname": session["uname"], "name": session["name"]})
     if existing_user:
-  
-        users.update_one({"uname": session["uname"]}, {"$push": {"questions": question_text}})
-        return jsonify({"success": True})
-    else:
-        return jsonify({"success": False, "message": "User not found"})
+        users.update_one({"uname": session["uname"], "name": session["name"]}, {"$push": {"topic": topic}})
+    else: return jsonify({"success": False})
+    return jsonify({"success": True, "question":bard.questions["Question"], "answer":bard.questions["Answer"]})
 
 
 @app.route('/get_questions')
