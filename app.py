@@ -1,9 +1,8 @@
-from flask import Flask, render_template, redirect, url_for, request, session,jsonify,flash
-from officialmodel import BardGenerator
+from flask import Flask, render_template, redirect, url_for, request, session, jsonify, flash
+from flask_bcrypt import Bcrypt
 from flask_session import Session
 import datetime
 import requests
-import json
 from pymongo import MongoClient
 
 client = MongoClient('localhost', 27017)
@@ -12,16 +11,18 @@ db = client.flask_db
 users = db.users
 
 app = Flask(__name__)
+bcrypt = Bcrypt(app)
+
 app.secret_key = "BADKEY"
 app.config['SESSION_TYPE'] = 'filesystem'
-app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(minutes=5)
+app.config['PERMANENT_SESSION_LIFETIME'] = datetime.timedelta(minutes=30)
 Session(app)
 
 debug_login = False
 
 def go_to_login():
-    # return False
-    if debug_login: return False
+    if debug_login:
+        return False
     if "uname" not in session or not session.get("uname"):
         return True
     else:
@@ -33,29 +34,36 @@ def signup():
         session["name"] = str(request.form.get("name")).strip()
         session["uname"] = str(request.form.get("uname")).strip()
         session["pswd"] = str(request.form.get("pswd")).strip()
+
+        # Hash the password before storing it
+        hashed_password = bcrypt.generate_password_hash(session["pswd"]).decode('utf-8')
+
         existing_user = users.find_one({"uname": session["uname"], "name": session["name"]})
         if existing_user:
             flash('Username already exists. Please choose a different username.', 'error')
             return redirect(url_for('signup'))
-        users.insert_one({"name": session["name"], "uname": session["uname"], "pswd": session["pswd"]})
-        return redirect(url_for('index'))
-    return render_template("login.html")
 
+        users.insert_one({"name": session["name"], "uname": session["uname"], "pswd": hashed_password})
+        return redirect(url_for('index'))
+
+    return render_template("login.html")
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         session["uname"] = str(request.form.get("uname")).strip()
         session["pswd"] = str(request.form.get("pswd")).strip()
-        existing_user = users.find_one({"uname": session["uname"], "pswd": session["pswd"]})
-        if not existing_user:
+        existing_user = users.find_one({"uname": session["uname"]})
+
+        if not existing_user or not bcrypt.check_password_hash(existing_user["pswd"], session["pswd"]):
             flash('Incorrect username or password. Please try again.', 'error')
             return redirect(url_for('login'))
-        session["name"] = users.find_one({"uname": session["uname"], "pswd": session["pswd"]}, {"name":1, "_id":0})["name"]
-        return redirect(url_for('index'))
+
+        session["name"] = existing_user.get("name")
+        return render_template("index.html", name=session["name"])
 
     return render_template("login.html")
-
+    
 @app.route("/index")
 def index():
     if go_to_login():
