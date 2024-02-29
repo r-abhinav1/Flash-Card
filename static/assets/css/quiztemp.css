@@ -1,0 +1,135 @@
+body {
+    margin: 0;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #ffffff;
+    font-family: 'Arial', sans-serif; /* Replace with your desired font */
+    overflow-y: hidden; /* Hide vertical scrollbar */
+}
+
+#quizContainer {
+    background-color: #141529;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: justify;
+    max-width: 400px;
+    overflow-y:auto; /* Enable vertical scrolling if needed */
+    max-height: calc(100vh - 40px); /* Adjust the max-height accordingly */
+    padding-left: 30px;
+    padding-right: 30px;
+
+}
+
+h2 {
+    margin-top: 0;
+    text-align: justify;
+    font-family: 'Nunito Sans', serif; 
+    font-size: 1.2em;
+    word-wrap: break-word; /* Add this property to handle long words */
+}
+
+#options {
+    background-color: #141529;
+    padding: 10px;
+}
+
+.option {
+    position: relative;
+    border-radius: 10px;
+    font-family:monospace;
+    font-size: large;
+    background-color: #141529;
+    border: 3px solid #313246;
+    margin-bottom: 10px;
+    display: block;
+    padding: 14px;
+    padding-left:20px;
+    cursor: pointer;
+}
+
+.option.selected ,.option:active {
+     /* background-color: #4CAF50; */
+    border-color: #fff;
+    border-radius: 12px;
+    color: #fff;
+}
+
+.option:hover {
+    border-radius: 7px;
+    border-color: #7E849E;
+}
+
+
+
+.option input {
+    margin-right: 10px;
+    display: none; /* Hide the actual radio button */
+}
+
+.option input:checked + label {
+    border-color: #7E849E; /* Border color when the radio button is selected */
+}
+
+.but{
+    background-color: #7E849E;
+    color: #ffffff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.but:hover {
+    background-color: #555;
+}
+
+.option input {
+    position: absolute;
+    opacity: 0;
+
+}
+
+.option:hover {
+    border-radius: 7px;
+    border-color: #7E849E; 
+}
+
+.option input:checked + label {
+    border-color: #7E849E; 
+}
+
+.HideNan{
+    display: none;
+}
+
+#quizContainer::-webkit-scrollbar {
+    width: 0.5em;
+}
+
+#quizContainer::-webkit-scrollbar-thumb {
+    background-color: #141529;
+}
+
+button.but{
+    margin-right: 250px;
+}
+
+.option.correct {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.option.incorrect {
+    background-color: #FF5733; /* Change this to your desired color for incorrect answers */
+    color: #fff;
+}
+
+.option.correct:hover,
+.option.incorrect:hover {
+    border-radius: 7px;
+    border-color: #7E849E;
+}
+

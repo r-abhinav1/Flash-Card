@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz</title>
+    <link rel="stylesheet" href="/static/assets/css/quiz.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Agbalumo&family=Lato:ital,wght@1,300&family=Merienda&family=Poppins:wght@500&family=Space+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Raleway:wght@700&display=swap"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Agbalumo&family=Lato:ital,wght@1,300&family=Merienda&family=Poppins:wght@500&family=Space+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-image: url("bg\ pic.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      .card-container {
+        width: 400px;
+        height: 200px;
+        perspective: 1000px;
+        transform-style: preserve-3d;
+        transition: transform 0.5s;
+      }
+
+      .card {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.5s;
+        cursor: pointer;
+      }
+
+      .card.flip {
+        transform: rotateY(180deg);
+      }
+
+      .face {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        backface-visibility: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        box-sizing: border-box;
+        border: 2px solid #56689e;
+        border-radius: 10px;
+        background-color: #1b1f42;
+        color: aliceblue;
+        font-family: "Space Mono", monospace;
+        font-size: medium;
+      }
+
+      .back {
+        transform: rotateY(180deg);
+      }
+      .user-input {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+}
+
+    #userInput {
+      padding: 10px;
+      margin-right: 10px;
+      font-family: "Space Mono", monospace;
+      font-size: medium;
+      border: 2px solid #56689E;
+      border-radius: 5px;
+      background-color: #1B1F42;
+      color: aliceblue;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-family: "Space Mono", monospace;
+      font-size: medium;
+      border: none;
+      border-radius: 5px;
+      background-color: #56689E;
+      color: aliceblue;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #1B1F42;
+    }
+
+    </style>
+    <link rel="stylesheet" href="/static/assets/css/quiz.css" />
+  </head>
+
+  <body>
+    <div class="intro">
+      <h1 class="logoHeader">
+        <span class="logo">Flash Cards</span>
+        <span class="logo">Interface</span>
+        <span class="logo" id="welcome-name">.</span>
+      </h1>
+    </div>
+    <div class="user-input">
+      <input type="text" id="userInput" placeholder="Enter a new question" />
+      <button onclick="addNewQuestion()">Generate Question</button>
+    </div>
+    <br>  
+    <div class="card-container" onclick="handleCardClick(event)">
+      <div class="card" id="card">
+        <div class="face front" id="frontFace">
+          <span class="question"></span>
+        </div>
+        <div class="face back" id="backFace">
+          <span class="question"></span>
+        </div>
+      </div>
+    </div>
+
+    <script src="/static/assets/js/quiz.js"></script>
+  </body>
+</html>

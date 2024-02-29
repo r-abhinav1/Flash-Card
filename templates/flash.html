@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flash Cards</title>
+  <style>
+    body {
+      background-color: #1a1a1a;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #flashcard-container {
+      width: 300px;
+      height: 200px; /* Set a fixed height */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      background-color: #333;
+      text-align: center;
+      display: flexbox;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #flashcard {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+    }
+
+    .button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    #next-btn {
+      background-color: #3498db;
+    }
+
+    #prev-btn {
+      background-color: #e74c3c;
+    }
+  </style>
+</head>
+<body>
+
+<div id="flashcard-container">
+  <div id="flashcard">This is the front of the flash card.</div>
+  <button class="button" id="prev-btn">Previous</button>
+  <button class="button" id="next-btn">Next</button>
+</div>
+
+<script>
+  const flashcard = document.getElementById('flashcard');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  const flashcards = [
+    'This is the front of the flash card.',
+    'This is the back of the flash card.',
+    'Another flash card example.',
+    'Keep going!'
+  ];
+
+  let currentCardIndex = 0;
+
+  function updateFlashcard() {
+    flashcard.textContent = flashcards[currentCardIndex];
+  }
+
+  function showNextCard() {
+    currentCardIndex = (currentCardIndex + 1) % flashcards.length;
+    updateFlashcard();
+  }
+
+  function showPrevCard() {
+    currentCardIndex = (currentCardIndex - 1 + flashcards.length) % flashcards.length;
+    updateFlashcard();
+  }
+
+  updateFlashcard(); // Initial update
+
+  nextBtn.addEventListener('click', showNextCard);
+  prevBtn.addEventListener('click', showPrevCard);
+</script>
+
+</body>
+</html>

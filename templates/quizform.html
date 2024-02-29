@@ -1,0 +1,78 @@
+<!-- quizform.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Form</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1a1a1a; /* Dark background color */
+            color: #fff; /* Text color */
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; /* Set the height of the body to 100% viewport height */
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: #333; /* Darker background color for form */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* Light shadow */
+        }
+
+        h1 {
+            color: #fff; /* Header text color */
+        }
+
+        label {
+            margin-bottom: 8px;
+            color: #bbb; 
+            text-align: left;
+            margin-bottom: 14px; 
+        }
+
+        input {
+            width: calc(100% - 22px); /* Adjusted width for input */
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #555; /* Darker border color */
+            border-radius: 4px;
+            background-color: #444; /* Darker background color for input */
+            color: #fff; /* Input text color */
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="quizForm" action="{{ url_for('quiz') }}" method="POST">
+        <label for="topic">Enter Topic</label>
+        <input type="text" name="topic" id="topic" required>
+        <br>
+        <label for="difficulty">Enter Topic Difficulty</label>
+        <input type="text" name="difficulty" id="difficulty" required>
+        <br>
+        <input type="submit" value="Generate Quiz">
+    </form>
+</body>
+
+</html>

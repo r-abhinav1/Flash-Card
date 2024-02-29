@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="/static/assets/css/quiztemp.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">    
+    <style>
+        #question{
+            font-family: 'Raleway';
+            font-size: 1.4em;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="quizContainer">
+        <span id="question">{{ questions["Question"] }}</span>
+        <form id="quizForm" action="{{ url_for('quiztemp') }}" method="GET">
+            <input type="hidden" name="topic" value="{{ request.args.get('topic') }}">
+            <input type="hidden" name="difficulty" value="{{ request.args.get('difficulty') }}">
+
+            <div id="options">
+                {% for option in questions["Options"].split("\n") %}
+                    {% if option.strip() != '' %}
+                    <input type="radio" name="selected_option" value="{{ option.strip() }}" class="HideNan">
+                    <label class="option" onclick="selectOption(this)">{{ option.strip() }}</label>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <br>
+            <input type="button" value="Check Answer" onclick="checkAnswer()" class="but" id="check">
+            <input type="submit" name="action" value="Next" class="but" id="sub">
+        </form>
+    </div>
+
+    <script>
+        function checkAnswer() {
+            var selectedOption = document.querySelector('input[name="selected_option"]:checked');
+            var but=document.getElementById("check");
+            if (selectedOption) {
+                var userAnswer = selectedOption.value;
+                var correctAnswer = '{{ questions["Answer"] }}';
+                var allOptions = document.querySelectorAll('.option');
+
+                allOptions.forEach(option => {
+                    option.classList.remove('selected', 'wrong', 'correct');
+                });
+
+                allOptions.forEach(option => {
+                    if (option.innerText.trim()[0] === correctAnswer.trim()[0]) {
+                        option.classList.add('correct');
+                        console.log("yes");
+                    }
+                    else{
+                        option.classList.add('incorrect');
+                        console.log("no");
+                    }
+                });
+                but.disabled=true;
+            } else {
+                alert("Please select an option before checking the answer.");
+            }
+        }
+
+        const optionLabels = document.querySelectorAll('.option');
+        optionLabels.forEach(label => {
+            label.addEventListener('click', () => {
+                const radioInput = label.querySelector('input[type="radio"]');
+                if (radioInput) {
+                    radioInput.checked = true;
+                }
+            });
+        });
+
+
+        let selectedOption = null;
+
+        function selectOption(option) {
+            if (selectedOption) {
+                selectedOption.classList.remove('selected');
+            }
+
+            option.classList.add('selected');
+            selectedOption = option;
+
+            const radioInput = option.previousElementSibling; 
+            if (radioInput && radioInput.type === 'radio') {
+                radioInput.checked = true;
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash Fleet - Your Student Companion</title>
+    <link rel="stylesheet" href="/static/assets/css/index.css">
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Raleway:wght@700&display=swap">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Agbalumo&family=Lato:ital,wght@1,300&family=Merienda&family=Poppins:wght@500&family=Space+Mono&display=swap"
+        rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+
+    <style>
+        p{
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body class="animate">
+    <div class="intro">
+        <h1 class="logoHeader">
+            <span class="logo">Welcome ,</span>
+            <span class="logo">{{ session["name"] }}</span>
+            <span class="logo" id="welcome-name">!</span>
+        </h1>
+    </div>
+    <header>
+        <div class="logo2" style="font-family: 'Merienda';">Flash Fleet</div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('signout') }}" style="text-decoration: none; color: inherit;">Sign Out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Your Ultimate Student Companion</h1>
+            <p>Supercharge your learning experience with Flash Fleet. A platform designed to help you study efficiently,
+                stay organized, and ace your exams.</p>
+            <a class="cta-btn" onclick="scro()">Get Started</a>
+        </section>
+
+        <section class="features" id="feat">
+            <a href=" {{ url_for('timer') }} " style="text-decoration:none; color:#ffffff" target="_blank">
+                <div class="feature">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" style="height: 40px;">
+                        <path fill="#b3b3b3"
+                            d="M32 0C14.3 0 0 14.3 0 32S14.3 64 32 64V75c0 42.4 16.9 83.1 46.9 113.1L146.7 256 78.9 323.9C48.9 353.9 32 394.6 32 437v11c-17.7 0-32 14.3-32 32s14.3 32 32 32H64 320h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V437c0-42.4-16.9-83.1-46.9-113.1L237.3 256l67.9-67.9c30-30 46.9-70.7 46.9-113.1V64c17.7 0 32-14.3 32-32s-14.3-32-32-32H320 64 32zM96 75V64H288V75c0 25.5-10.1 49.9-28.1 67.9L192 210.7l-67.9-67.9C106.1 124.9 96 100.4 96 75z" />
+                    </svg>
+                    <h2>Timer</h2>
+                    <p>Stay focused with our customizable timer feature. Break down your study sessions for maximum
+                        efficiency.</p>
+                </div>
+            </a>
+            <a href=" {{ url_for('flash_page') }} " style="text-decoration:none; color:#ffffff" target="_blank">
+                <div class="feature">
+                    <svg style="height: 42px;">
+                        <image xlink:href="/static/assets/img/flash.svg" width="100%" height="100%"></image>
+                    </svg>
+    
+                    <h2>Flash Cards</h2>
+                    <p>Revise key concepts using our interactive flashcards. Customize your decks and track your progress.
+                    </p>
+                </div>
+            </a>
+            
+            <a href=" {{ url_for('quizform') }} " style="text-decoration:none; color:#ffffff" target="_blank">
+                <div class="feature">
+                    <svg style="height: 50px;">
+                        <image xlink:href="/static/assets/img/quiz.svg" width="100%" height="100%"></image>
+                    </svg>
+                    <h2>Quiz</h2>
+                    <p>Test your knowledge with quizzes tailored to your courses. Receive instant feedback and track your
+                        improvement.</p>
+                </div>
+            
+            </a>
+
+        </section>
+    </main>
+
+    <script>
+        function scro() {
+            console.log("hello");
+            var section = document.getElementById('feat');
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+    <script src="/static/assets/js/index.js"></script>
+</body>
+
+</html>

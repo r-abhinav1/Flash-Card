@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/static/assets/css/login.css">
+</head>
+
+<body>
+    <div id="particles-js">
+        <div id="register-form">
+            <form action="{{ url_for('login') }}" method="POST" style="padding: 0px;">
+                <table cellpadding="3">
+                    <tr>
+                        <td colspan="2" align="center"><span id="norm">Enter your Details</span></td>
+                    </tr>
+                    <tr>
+                        <td><label for="uname">Username</label></td>
+                        <td><input type="text" name="uname" id="uname" class="inpp" onkeyup="handleKeyPress(event, 'continueButtonLogin')"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="pswd">Password</label></td>
+                        <td><input type="password" name="pswd" id="pswd" class="inpp" onkeyup="handleKeyPress(event, 'continueButtonLogin')"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center"><input type="submit" value="Sign in" id="continueButtonLogin"></td>
+                    </tr>
+                </table>
+            </form>
+            <span id="create2">Don't have an account? <i class="here">register</i></span>
+        </div>
+
+        <div id="form-group">
+            <span id="typing-effect"></span>
+            <br><br>
+            <form name="myform" action="{{ url_for('signup') }}" method="POST" id="main_form">
+            </form>
+        </div>
+
+        <script src="/static/assets/js/login.js"></script>
+        <script>
+            function handleKeyPress(event, buttonId) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    document.getElementById(buttonId).click();
+                }
+            }
+        
+            document.addEventListener('DOMContentLoaded', function () {
+                var elementsWithClass = document.getElementsByClassName("inpp");
+        
+                for (var i = 0; i < elementsWithClass.length; i++) {
+                    elementsWithClass[i].addEventListener("keyup", function (event) {
+                        handleKeyPress(event, 'continueButtonLogin');
+                    });
+                }
+            });
+        </script>
+        
+    </div>
+
+    <script src="/static/assets/js/particles.js"></script>
+    <script src="/static/assets/js/app.js"></script>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <script>
+        alert("{{ message }}");
+    </script>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+</body>
+
+</html>
