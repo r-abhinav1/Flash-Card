@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request, session, jsonify, flash
 from flask_bcrypt import Bcrypt
 from flask_session import Session
+from officialmodel import BardGenerator
 import datetime
 import requests
 from pymongo import MongoClient
@@ -44,7 +45,7 @@ def signup():
             return redirect(url_for('signup'))
 
         users.insert_one({"name": session["name"], "uname": session["uname"], "pswd": hashed_password})
-        return redirect(url_for('index'))
+        return render_template("index.html", name=session["name"])
 
     return render_template("login.html")
 
