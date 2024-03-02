@@ -102,7 +102,7 @@ window.addEventListener("DOMContentLoaded", ()=>{
               // If successfully added to MongoDB, update the local questions array
               questions.push(data.question);
               questions.push(data.answer);
-              alert('New question added successfully!');
+              // alert('New question added successfully!');
               // document.getElementById('userInput').value = ''; // Clear the input field
               updateQuestion();
             } else {
